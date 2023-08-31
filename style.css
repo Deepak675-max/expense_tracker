@@ -47,15 +47,26 @@ header {
     border: 1px solid #ccc;
 }
 
-#submit {
+#add {
     display: block;
-    width: 100%;
+    width: 20%;
     padding: 10px 15px;
     border: 0;
     background: #333;
     color: #fff;
     border-radius: 5px;
     margin: 5px 0;
+}
+
+#update {
+    display: block;
+    width: 20%;
+    padding: 10px 15px;
+    border: 0;
+    background: #bd3434;
+    color: #fff;
+    border-radius: 5px;
+    margin: 5px 10px;
 }
 
 .btn:hover {

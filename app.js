@@ -1,50 +1,78 @@
+// Axois Instance
+
+const axoisInstance = axios.create({
+    baseURL: 'http://localhost:3000/api/expense'
+})
 
 
-// ELEMENT SELECTORS
-
-// // Single Element Selectors
-// console.log(document.getElementById('my-form'));
-// console.log(document.querySelector('.container'));
-// // Multiple Element Selectors
-// console.log(document.querySelectorAll('.item'));
-// console.log(document.getElementsByTagName('li'));
-// console.log(document.getElementsByClassName('item'));
-
-// const items = document.querySelectorAll('.item');
-// items.forEach((item) => console.log(item));
-
-
-// // MANIPULATING THE DOM
-// const ul = document.querySelector('.items');
-// // ul.remove();
-// // ul.lastElementChild.remove();
-// ul.firstElementChild.textContent = 'Hello';
-// ul.children[1].innerText = 'Brad';
-// ul.lastElementChild.innerHTML = '<h1>Hello</h1>';
-
-// const btn = document.querySelector('.btn');
-// // btn.style.background = 'red';
+async function getExpense() {
+    try {
+        const data = {
+            expenseId: null
+        }
+        const responseData = await axoisInstance.post('/get-expense', data)
+        if (responseData.data.error) {
+            throw responseData.data.error
+        }
+        console.log(responseData.data);
+        loadExpenseData(responseData.data.data.expenses);
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 
-// // EVENTS
-
-// // Mouse Event
-// btn.addEventListener('click', e => {
-//     e.preventDefault();
-//     console.log(e.target.className);
-//     document.getElementById('my-form').style.background = '#ccc';
-//     document.querySelector('body').classList.add('bg-dark');
-//     ul.lastElementChild.innerHTML = '<h1>Changed</h1>';
-// });
-
-// // Keyboard Event
-// const nameInput = document.querySelector('#name');
-// nameInput.addEventListener('input', e => {
-//     document.querySelector('.container').append(nameInput.value);
-// });
+async function createExpense(data) {
+    try {
+        const responseData = await axoisInstance.post('/create-expense', data)
+        if (responseData.data.error) {
+            throw responseData.data.error
+        }
+        await getExpense();
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 
-// USER FORM SCRIPT
+async function updateExpense(data) {
+    try {
+        const expenseData = {
+            expenseId: parseInt(data.expenseId),
+            amount: data.amount,
+            description: data.description,
+            category: data.category
+        }
+        console.log(expenseData);
+        const responseData = await axoisInstance.put('/update-expense', expenseData)
+        if (responseData.data.error) {
+            throw responseData.data.error
+        }
+        await getExpense();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+async function deleteExpense(id) {
+    try {
+        const data = {
+            expenseId: parseInt(id)
+        }
+        console.log(data);
+        const responseData = await axoisInstance.put('/delete-expense', data)
+        if (responseData.data.error) {
+            throw responseData.data.error
+        }
+        await getExpense();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+window.addEventListener('DOMContentLoaded', getExpense);
+
 
 // Put DOM elements into variables
 const myForm = document.querySelector('#my-form');
@@ -52,18 +80,24 @@ const expenseAmount = document.querySelector('#amount');
 const description = document.querySelector('#description');
 const category = document.querySelector('#category');
 const msg = document.querySelector('.msg');
-const userList = document.querySelector('#users');
+const addBtn = document.querySelector('#add');
+const updateBtn = document.querySelector('#update');
+
+const expenseList = document.querySelector('#expenses');
 
 // Listen for form submit
-myForm.addEventListener('submit', onSubmit);
+addBtn.addEventListener('click', addData);
 
-userList.addEventListener('click', removeItem);
-userList.addEventListener('click', editItem);
+updateBtn.addEventListener('click', updateData);
 
 
-function onSubmit(e) {
+expenseList.addEventListener('click', removeItem);
+expenseList.addEventListener('click', editItem);
+
+
+function addData(e) {
     e.preventDefault();
-
+    console.log("inside add data function");
     if (expenseAmount.value === '' || description.value === '' || category.value === '') {
         // alert('Please enter all fields');
         msg.classList.add('error');
@@ -72,18 +106,65 @@ function onSubmit(e) {
         // Remove error after 3 seconds
         setTimeout(() => msg.remove(), 3000);
     } else {
-        // Create new list item with user
+        const expenseData = {
+            amount: expenseAmount.value,
+            description: description.value,
+            category: category.value,
+        }
+
+        createExpense(expenseData);
+
+        // Clear fields
+        expenseAmount.value = '';
+        description.value = '';
+        category.value = '';
+    }
+}
+
+function updateData(e) {
+    e.preventDefault();
+    console.log("inside update data function");
+    if (expenseAmount.value === '' || description.value === '' || category.value === '') {
+        // alert('Please enter all fields');
+        msg.classList.add('error');
+        msg.innerHTML = 'Please enter all fields';
+
+        // Remove error after 3 seconds
+        setTimeout(() => msg.remove(), 3000);
+    } else {
+        const expenseData = {
+            expenseId: expenseid.value,
+            amount: expenseAmount.value,
+            description: description.value,
+            category: category.value,
+        }
+
+
+        updateExpense(expenseData);
+
+        // Clear fields
+        expenseAmount.value = '';
+        description.value = '';
+        category.value = '';
+    }
+}
+
+
+
+function loadExpenseData(expenses) {
+    expenseList.innerHTML = '';
+    expenses.map((data, index) => {
         const li = document.createElement('li');
+        console.log('li');
 
-
-        li.setAttribute('id', `${Date.now()}`)
+        li.setAttribute('id', `${data.id}`);
         // Add text node with input values
-        li.appendChild(document.createTextNode(`${expenseAmount.value} - ${description.value} - ${category.value}`));
+        li.appendChild(document.createTextNode(`${data.amount} - ${data.description} - ${data.category}`));
 
         var editBtn = document.createElement('button');
 
         // Add classes to del button
-        editBtn.className = 'btn btn-danger btn-sm float-right edit';
+        editBtn.className = 'mx-2 btn btn-danger btn-sm float-right edit';
 
         // Append text node
         editBtn.appendChild(document.createTextNode('Edit Expense'));
@@ -102,26 +183,10 @@ function onSubmit(e) {
         // Append button to li
         li.appendChild(deleteBtn);
 
-        const expenseData = {
-            id: Date.now(),
-            expenseAmount: expenseAmount.value,
-            description: description.value,
-            category: category.value,
-        }
-
-        const data = JSON.stringify(expenseData);
-
-        localStorage.setItem(expenseData.id, data);
-
         // Append to ul
-        userList.appendChild(li);
+        expenseList.appendChild(li);
+    })
 
-        // Clear fields
-        expenseAmount.value = '';
-        description.value = '';
-        category.value = '';
-
-    }
 }
 
 function removeItem(e) {
@@ -129,8 +194,7 @@ function removeItem(e) {
         if (confirm('Are You Sure?')) {
             var li = e.target.parentElement;
             const id = li.getAttribute('id');
-            localStorage.removeItem(id);
-            userList.removeChild(li);
+            deleteExpense(id);
         }
     }
 }
@@ -153,8 +217,7 @@ function editItem(e) {
             }
         }
         const id = li.getAttribute('id');
-        console.log('id: ', id);
-        localStorage.removeItem(id);
-        userList.removeChild(li);
+        const expenseid = document.querySelector('#expenseid');
+        expenseid.value = id;
     }
 }
