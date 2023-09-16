@@ -4,18 +4,33 @@ const axoisInstance = axios.create({
     baseURL: 'http://localhost:3000/api/expense'
 })
 
+// Function to retrieve query parameters from URL
+function getQueryParam(id) {
+    const urlParams = new URLSearchParams(window.location.search);
+    console.log("url params = ", urlParams);
+    return urlParams.get(id);
+}
+
+// Get the username from the query parameters
+const userId = getQueryParam("userid");
+const userName = getQueryParam("username");
+
+
+document.getElementById('userId').setAttribute('key', userId);
+document.getElementById('userId').innerHTML = `<h6>${userName}</h6>`
 
 async function getExpense() {
     try {
         const data = {
-            expenseId: null
+            expenseId: null,
+            userId: userId
         }
         const responseData = await axoisInstance.post('/get-expense', data)
         if (responseData.data.error) {
             throw responseData.data.error
         }
         console.log(responseData.data);
-        loadExpenseData(responseData.data.data.expenses);
+        return responseData.data.data.expenses;
     } catch (error) {
         console.log(error);
     }
@@ -28,7 +43,7 @@ async function createExpense(data) {
         if (responseData.data.error) {
             throw responseData.data.error
         }
-        await getExpense();
+        return responseData.data.data;
     } catch (error) {
         console.log(error);
     }
@@ -48,30 +63,35 @@ async function updateExpense(data) {
         if (responseData.data.error) {
             throw responseData.data.error
         }
-        await getExpense();
+        return responseData.data.data;
     } catch (error) {
         console.log(error);
     }
 }
 
 
-async function deleteExpense(id) {
+async function deleteExpense(expenseData) {
     try {
-        const data = {
-            expenseId: parseInt(id)
-        }
-        console.log(data);
-        const responseData = await axoisInstance.put('/delete-expense', data)
+        const responseData = await axoisInstance.put('/delete-expense', expenseData)
         if (responseData.data.error) {
             throw responseData.data.error
         }
-        await getExpense();
+        return responseData.data.data;
     } catch (error) {
         console.log(error);
     }
 }
 
-window.addEventListener('DOMContentLoaded', getExpense);
+window.addEventListener('DOMContentLoaded', function (event) {
+    event.preventDefault();
+    getExpense()
+        .then(expenses => {
+            loadExpenseData(expenses);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+});
 
 
 // Put DOM elements into variables
@@ -82,18 +102,12 @@ const category = document.querySelector('#category');
 const msg = document.querySelector('.msg');
 const addBtn = document.querySelector('#add');
 const updateBtn = document.querySelector('#update');
-
 const expenseList = document.querySelector('#expenses');
 
-// Listen for form submit
 addBtn.addEventListener('click', addData);
-
 updateBtn.addEventListener('click', updateData);
-
-
 expenseList.addEventListener('click', removeItem);
 expenseList.addEventListener('click', editItem);
-
 
 function addData(e) {
     e.preventDefault();
@@ -107,12 +121,23 @@ function addData(e) {
         setTimeout(() => msg.remove(), 3000);
     } else {
         const expenseData = {
+            userId: userId,
             amount: expenseAmount.value,
             description: description.value,
             category: category.value,
         }
 
-        createExpense(expenseData);
+        createExpense(expenseData)
+            .then(data => {
+                console.log(data);
+                return getExpense();
+            })
+            .then(data => {
+                loadExpenseData(data);
+            })
+            .catch(error => {
+                console.log(error);
+            })
 
         // Clear fields
         expenseAmount.value = '';
@@ -123,7 +148,6 @@ function addData(e) {
 
 function updateData(e) {
     e.preventDefault();
-    console.log("inside update data function");
     if (expenseAmount.value === '' || description.value === '' || category.value === '') {
         // alert('Please enter all fields');
         msg.classList.add('error');
@@ -132,15 +156,26 @@ function updateData(e) {
         // Remove error after 3 seconds
         setTimeout(() => msg.remove(), 3000);
     } else {
+
         const expenseData = {
+            userId: userId,
             expenseId: expenseid.value,
             amount: expenseAmount.value,
             description: description.value,
             category: category.value,
         }
 
-
-        updateExpense(expenseData);
+        updateExpense(expenseData)
+            .then(data => {
+                console.log(data);
+                return getExpense();
+            })
+            .then(data => {
+                loadExpenseData(data);
+            })
+            .catch(error => {
+                console.log(error);
+            })
 
         // Clear fields
         expenseAmount.value = '';
@@ -193,8 +228,22 @@ function removeItem(e) {
     if (e.target.classList.contains('delete')) {
         if (confirm('Are You Sure?')) {
             var li = e.target.parentElement;
-            const id = li.getAttribute('id');
-            deleteExpense(id);
+            const expenseId = li.getAttribute('id');
+            const expenseData = {
+                expenseId: expenseId,
+                userId: userId
+            }
+            deleteExpense(expenseData)
+                .then(data => {
+                    console.log(data);
+                    return getExpense();
+                })
+                .then(data => {
+                    loadExpenseData(data);
+                })
+                .catch(error => {
+                    console.log(error);
+                })
         }
     }
 }
@@ -202,6 +251,11 @@ function removeItem(e) {
 
 function editItem(e) {
     if (e.target.classList.contains('edit')) {
+        document.getElementById('update').style.display = 'block';
+        document.getElementById('add').style.display = 'none';
+        document.getElementById('update').style.backgroundColor = 'green';
+        document.getElementById('update').style.color = 'white';
+
         var li = e.target.parentElement;
         const data = li.firstChild.textContent.split(' - ');
         const expenseAmount = document.querySelector('#amount');

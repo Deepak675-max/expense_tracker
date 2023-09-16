@@ -59,14 +59,7 @@ header {
 }
 
 #update {
-    display: block;
-    width: 20%;
-    padding: 10px 15px;
-    border: 0;
-    background: #bd3434;
-    color: #fff;
-    border-radius: 5px;
-    margin: 5px 10px;
+    display: none;
 }
 
 .btn:hover {
@@ -83,4 +76,29 @@ header {
     color: #fff;
     padding: 5px;
     margin: 5px;
+}
+
+#signup-box {
+    padding: 10px;
+    border: 1px solid black;
+    width: 100%;
+}
+
+#main-signup-box {
+    margin-top: 100px;
+}
+
+
+#login-box {
+    padding: 10px;
+    border: 1px solid black;
+    width: 100%;
+}
+
+#main-login-box {
+    margin-top: 100px;
+}
+
+.navbar {
+    background-color: #dbcaca;
 }
