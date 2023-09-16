@@ -19,80 +19,98 @@ const userName = getQueryParam("username");
 document.getElementById('userId').setAttribute('key', userId);
 document.getElementById('userId').innerHTML = `<h6>${userName}</h6>`
 
+const user = document.getElementById('userId');
+
 async function getExpense() {
     try {
-        const data = {
+        const expenseData = {
             expenseId: null,
             userId: userId
         }
-        const responseData = await axoisInstance.post('/get-expense', data)
-        if (responseData.data.error) {
-            throw responseData.data.error
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                userid: userId
+            }
         }
-        console.log(responseData.data);
+        const responseData = await axoisInstance.post('/get-expense', expenseData, config);
+        if (responseData.error) {
+            throw responseData.error
+        }
         return responseData.data.data.expenses;
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 }
 
-
-async function createExpense(data) {
+async function createExpense(expenseData) {
     try {
-        const responseData = await axoisInstance.post('/create-expense', data)
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                userid: userId
+            }
+        }
+        const responseData = await axoisInstance.post('/create-expense', expenseData, config);
         if (responseData.data.error) {
             throw responseData.data.error
         }
         return responseData.data.data;
     } catch (error) {
         console.log(error);
+        throw error;
     }
 }
 
-
-async function updateExpense(data) {
+async function updateExpense(expenseData) {
     try {
-        const expenseData = {
-            expenseId: parseInt(data.expenseId),
-            amount: data.amount,
-            description: data.description,
-            category: data.category
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                userid: userId
+            }
         }
-        console.log(expenseData);
-        const responseData = await axoisInstance.put('/update-expense', expenseData)
+        const responseData = await axoisInstance.put('/update-expense', expenseData, config)
         if (responseData.data.error) {
             throw responseData.data.error
         }
         return responseData.data.data;
     } catch (error) {
         console.log(error);
+        throw error;
     }
 }
-
 
 async function deleteExpense(expenseData) {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            userid: userId
+        }
+    }
     try {
-        const responseData = await axoisInstance.put('/delete-expense', expenseData)
+        const responseData = await axoisInstance.put('/delete-expense', expenseData, config)
         if (responseData.data.error) {
             throw responseData.data.error
         }
         return responseData.data.data;
     } catch (error) {
         console.log(error);
+        throw error;
     }
 }
 
-window.addEventListener('DOMContentLoaded', function (event) {
+window.addEventListener('focus', function (event) {
     event.preventDefault();
     getExpense()
         .then(expenses => {
+            console.log(expenses);
             loadExpenseData(expenses);
         })
         .catch(error => {
-            console.log(error);
+            this.window.location.href = 'signup.html'
         })
 });
-
 
 // Put DOM elements into variables
 const myForm = document.querySelector('#my-form');
@@ -111,7 +129,6 @@ expenseList.addEventListener('click', editItem);
 
 function addData(e) {
     e.preventDefault();
-    console.log("inside add data function");
     if (expenseAmount.value === '' || description.value === '' || category.value === '') {
         // alert('Please enter all fields');
         msg.classList.add('error');
@@ -121,7 +138,7 @@ function addData(e) {
         setTimeout(() => msg.remove(), 3000);
     } else {
         const expenseData = {
-            userId: userId,
+            userId: user.getAttribute('key'),
             amount: expenseAmount.value,
             description: description.value,
             category: category.value,
@@ -158,7 +175,7 @@ function updateData(e) {
     } else {
 
         const expenseData = {
-            userId: userId,
+            userId: user.getAttribute('key'),
             expenseId: expenseid.value,
             amount: expenseAmount.value,
             description: description.value,
@@ -190,7 +207,6 @@ function loadExpenseData(expenses) {
     expenseList.innerHTML = '';
     expenses.map((data, index) => {
         const li = document.createElement('li');
-        console.log('li');
 
         li.setAttribute('id', `${data.id}`);
         // Add text node with input values
@@ -229,9 +245,10 @@ function removeItem(e) {
         if (confirm('Are You Sure?')) {
             var li = e.target.parentElement;
             const expenseId = li.getAttribute('id');
+            console.log(user.getAttribute('key'));
             const expenseData = {
                 expenseId: expenseId,
-                userId: userId
+                userId: user.getAttribute('key'),
             }
             deleteExpense(expenseData)
                 .then(data => {

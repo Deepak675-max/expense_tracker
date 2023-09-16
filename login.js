@@ -25,6 +25,11 @@ function login(event) {
                 window.location.href = `app.html?userid=${user.id}&username=${user.userName}`;
             })
             .catch(error => {
+                const errorMsg = document.getElementById('err-msg');
+                errorMsg.innerHTML = `<h5>Invalid username or password.</h5>`
+                errorMsg.style.color = 'red';
+                errorMsg.style.textAlign = 'center';
+                setTimeout(() => errorMsg.remove(), 5000);
                 console.log(error);
             })
     }
