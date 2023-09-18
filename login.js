@@ -20,9 +20,11 @@ function login(event) {
             password: password.value
         }
         loginUser(userData)
-            .then(user => {
-                console.log(user);
-                window.location.href = `app.html?userid=${user.id}&username=${user.userName}`;
+            .then(responseData => {
+                console.log(responseData);
+                const token = responseData.token;
+                localStorage.setItem('token', token);
+                window.location.href = `app.html`;
             })
             .catch(error => {
                 const errorMsg = document.getElementById('err-msg');
@@ -42,7 +44,7 @@ async function loginUser(userData) {
         if (responseData.data.error) {
             throw responseData.data.error
         }
-        return responseData.data.data.user
+        return responseData.data.data
     } catch (error) {
         console.log(error);
         throw error;

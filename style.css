@@ -49,13 +49,7 @@ header {
 
 #add {
     display: block;
-    width: 20%;
-    padding: 10px 15px;
-    border: 0;
-    background: #333;
-    color: #fff;
-    border-radius: 5px;
-    margin: 5px 0;
+    background-color: lightgreen;
 }
 
 #update {
@@ -97,8 +91,4 @@ header {
 
 #main-login-box {
     margin-top: 100px;
-}
-
-.navbar {
-    background-color: #dbcaca;
 }
