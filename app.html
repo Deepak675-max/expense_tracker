@@ -21,7 +21,8 @@
                     aria-expanded="false">
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="profile">
-                    <li><button id="logout-btn" class="btn btn-lg">logout</button></li>
+                    <li><button id="logout-btn" class="btn btn-sm">Logout</button></li>
+                    <li id="premium-item"><button id="buy-premium-btn" class="btn btn-sm">Buy Premium</button></li>
                 </ul>
             </div>
         </div>
@@ -69,6 +70,7 @@
         </div>
 
     </div>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
     <script src="app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"

@@ -142,6 +142,12 @@ window.addEventListener('DOMContentLoaded', function (event) {
     getUserFromToken()
         .then(user => {
             document.querySelector('#profile').innerHTML = user.userName
+            console.log(user.isPremiumUser);
+            if (user.isPremiumUser) {
+                document.getElementById('buy-premium-btn').style.display = 'none';
+                document.getElementById('premium-item').innerHTML = '<p>premium Acocunt</p>';
+                document.getElementById('premium-item').style.color = 'yellowgreen';
+            }
             return getExpense();
         })
         .then(expenses => {
@@ -181,6 +187,52 @@ function logoutUserHelper(e) {
             console.log(error);
         })
 }
+
+document.getElementById('buy-premium-btn').addEventListener('click', async function (e) {
+    const token = localStorage.getItem('token');
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    }
+    const responseData = await axoisInstance.get('/order/purchase-premium-membership', config)
+    console.log(responseData);
+    const options = {
+        "key": responseData.data.data.key_id,
+        "order_id": responseData.data.data.order.id,
+        "handler": async function (response) {
+            console.log('handler function argument = ', response);
+            await axoisInstance.post('/order/update-transaction-status', {
+                orderId: options.order_id,
+                paymentId: response.razorpay_payment_id,
+                status: "SUCCESSFUL"
+
+            },
+                config
+            );
+            document.getElementById('premium-item').innerHTML = '<p>premium Acocunt</p>';
+            document.getElementById('premium-item').style.color = 'yellowgreen';
+            alert('You are now premium user.')
+        }
+
+    }
+    const rzp = new Razorpay(options);
+    // Open the Razorpay payment widget
+    rzp.open();
+    e.preventDefault();
+    rzp.on("payment.failed", async function (response) {
+        console.log(response);
+        await axoisInstance.post('/order/update-transaction-status', {
+            orderId: options.order_id,
+            paymentId: response.razorpay_payment_id,
+            status: "FAILED"
+        },
+            config
+        );
+        alert('something went wrong');
+    })
+})
 
 
 function addData(e) {
