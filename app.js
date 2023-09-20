@@ -137,6 +137,28 @@ async function logoutUser() {
     }
 }
 
+async function getLeaderboardData() {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            throw new Error('unauthorized user');
+        }
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }
+        const responseData = await axoisInstance.get('/premium/get-leaderboard', config);
+        if (responseData.data.error) {
+            throw responseData.data.error;
+        }
+        return responseData.data.data.leaderboardData;
+    } catch (error) {
+
+    }
+}
+
 window.addEventListener('DOMContentLoaded', function (event) {
     event.preventDefault();
     getUserFromToken()
@@ -147,12 +169,14 @@ window.addEventListener('DOMContentLoaded', function (event) {
                 document.getElementById('buy-premium-btn').style.display = 'none';
                 document.getElementById('premium-item').innerHTML = '<p>premium Acocunt</p>';
                 document.getElementById('premium-item').style.color = 'yellowgreen';
+                document.getElementById('leaderboard').style.display = 'block';
+                document.getElementById('leaderboard-box').style.display = 'none';
             }
+
             return getExpense();
         })
         .then(expenses => {
             loadExpenseData(expenses);
-
         })
         .catch(error => {
             this.window.location.href = 'login.html'
@@ -213,6 +237,7 @@ document.getElementById('buy-premium-btn').addEventListener('click', async funct
             );
             document.getElementById('premium-item').innerHTML = '<p>premium Acocunt</p>';
             document.getElementById('premium-item').style.color = 'yellowgreen';
+            document.getElementById('leaderboard').style.display = 'block';
             alert('You are now premium user.')
         }
 
@@ -232,6 +257,11 @@ document.getElementById('buy-premium-btn').addEventListener('click', async funct
         );
         alert('something went wrong');
     })
+})
+
+document.getElementById('leaderboard').addEventListener('click', async function (e) {
+    const leaderboardData = await getLeaderboardData();
+    loadLeaderborad(leaderboardData);
 })
 
 
@@ -309,6 +339,18 @@ function updateData(e) {
         document.getElementById('add').style.backgroundColor = 'lightgreen';
 
     }
+}
+
+function loadLeaderborad(leaderboardData) {
+    document.getElementById('expense-box').style.display = 'none';
+    let listItems = '';
+    leaderboardData.map(data => {
+        listItems += `<li class="mt-3">Name - ${data.userName} Total Expense - ${data.totalAmount}</li>`
+    })
+
+    document.getElementById('leaderboardData').innerHTML = listItems;
+    document.getElementById('leaderboard-box').style.display = 'block';
+
 }
 
 

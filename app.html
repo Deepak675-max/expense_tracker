@@ -22,53 +22,66 @@
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="profile">
                     <li><button id="logout-btn" class="btn btn-sm">Logout</button></li>
+                    <li id="leaderboard"><button id="leaderboard-btn" class="btn btn-sm">Leaderboard</button></li>
                     <li id="premium-item"><button id="buy-premium-btn" class="btn btn-sm">Buy Premium</button></li>
                 </ul>
             </div>
         </div>
     </header>
+    <div class="container-fluid" id="expense-box">
+        <div class="container d-flex justify-content-center">
+            <div class="p-3" id="my-box">
+                <div class="mt-3">
+                    <form id="my-form">
+                        <h1>Add Expense</h1>
+                        <div class="msg"></div>
+                        <div class="mt-4">
+                            <label for="amount">Expense Amount:</label>
+                            <input type="text" id="amount">
+                        </div>
+                        <div class="mt-4">
+                            <label for="description">Description:</label>
+                            <input type="text" id="description">
+                        </div>
+                        <div class="d-flex mt-4">
+                            <label for="category">Category:</label>
+                            <select class="mx-2" id="category" name="category">
+                                <option class="option" value="" selected>Choose....</option>
+                                <option class="option" value="Fuel">Fuel</option>
+                                <option class="option" value="Electricity">Electricity</option>
+                                <option class="option" value="Movie">Movie</option>
+                                <option class="option" value="Food">Food</option>
+                            </select>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <input type="hidden" id="expenseid" value="" name="expenseid">
+                            <input id="add" class="btn mt-4" type="submit" value="Add">
+                            <input id="update" class="btn mt-4" type="submit" value="Update">
+                        </div>
 
-    <div class="container d-flex justify-content-center">
-        <div class="p-3" id="my-box">
-            <div class="mt-3">
-                <form id="my-form">
-                    <h1>Add Expense</h1>
-                    <div class="msg"></div>
-                    <div class="mt-4">
-                        <label for="amount">Expense Amount:</label>
-                        <input type="text" id="amount">
-                    </div>
-                    <div class="mt-4">
-                        <label for="description">Description:</label>
-                        <input type="text" id="description">
-                    </div>
-                    <div class="d-flex mt-4">
-                        <label for="category">Category:</label>
-                        <select class="mx-2" id="category" name="category">
-                            <option class="option" value="" selected>Choose....</option>
-                            <option class="option" value="Fuel">Fuel</option>
-                            <option class="option" value="Electricity">Electricity</option>
-                            <option class="option" value="Movie">Movie</option>
-                            <option class="option" value="Food">Food</option>
-                        </select>
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <input type="hidden" id="expenseid" value="" name="expenseid">
-                        <input id="add" class="btn mt-4" type="submit" value="Add">
-                        <input id="update" class="btn mt-4" type="submit" value="Update">
-                    </div>
-
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="container d-flex justify-content-center mt-5">
-        <div id="my-list">
-            <ul id="expenses" class="list-group p-1">
+        <div class="container d-flex justify-content-center mt-5">
+            <div id="my-list">
+                <ul id="expenses" class="list-group p-1">
 
-            </ul>
+                </ul>
+            </div>
+
         </div>
+    </div>
+    <div class="container-fluid" id="leaderboard-box">
+        <div class="container d-flex justify-content-center mt-5" id>
+            <div id="leaderboard-list">
+                <h3>Leader board</h3>
+                <ul id="leaderboardData" class="list-group">
 
+                </ul>
+            </div>
+
+        </div>
     </div>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>

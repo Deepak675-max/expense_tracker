@@ -92,3 +92,15 @@ header {
 #main-login-box {
     margin-top: 100px;
 }
+
+#leaderboard {
+    display: none;
+}
+
+#leaderboard-list {
+    padding: 30px;
+}
+
+#leaderboard-box {
+    display: none;
+}
