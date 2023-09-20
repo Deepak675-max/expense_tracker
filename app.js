@@ -345,7 +345,7 @@ function loadLeaderborad(leaderboardData) {
     document.getElementById('expense-box').style.display = 'none';
     let listItems = '';
     leaderboardData.map(data => {
-        listItems += `<li class="mt-3">Name - ${data.userName} Total Expense - ${data.totalAmount}</li>`
+        listItems += `<li class="mt-3">Name - ${data.userName} Total Expense - ${data.totalExpense}</li>`
     })
 
     document.getElementById('leaderboardData').innerHTML = listItems;
