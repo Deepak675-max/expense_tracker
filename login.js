@@ -50,3 +50,27 @@ async function loginUser(userData) {
         throw error;
     }
 }
+
+async function sendResetPasswordLink(userData) {
+    try {
+        const responseData = await axoisInstance.post('/forgot-password', userData);
+        if (responseData.data.error) {
+            throw responseData.data.error
+        }
+        return responseData.data.data.emailDetails
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+
+document.getElementById('forgotpassword-btn').addEventListener('click', async function (event) {
+    event.preventDefault();
+    const email = document.getElementById('email').value;
+    const userData = {
+        email: email
+    }
+    const res = await sendResetPasswordLink(userData);
+    document.getElementById('msg').innerText = res.message;
+})

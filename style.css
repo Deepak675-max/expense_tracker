@@ -83,13 +83,13 @@ header {
 }
 
 
-#login-box {
+#form-box {
     padding: 10px;
     border: 1px solid black;
     width: 100%;
 }
 
-#main-login-box {
+#main-form-box {
     margin-top: 100px;
 }
 
