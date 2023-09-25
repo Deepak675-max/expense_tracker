@@ -24,7 +24,7 @@ function login(event) {
                 console.log(responseData);
                 const token = responseData.token;
                 localStorage.setItem('token', token);
-                window.location.href = `app.html`;
+                window.location.href = `table.html`;
             })
             .catch(error => {
                 const errorMsg = document.getElementById('err-msg');
@@ -51,26 +51,26 @@ async function loginUser(userData) {
     }
 }
 
-async function sendResetPasswordLink(userData) {
-    try {
-        const responseData = await axoisInstance.post('/forgot-password', userData);
-        if (responseData.data.error) {
-            throw responseData.data.error
-        }
-        return responseData.data.data.emailDetails
-    } catch (error) {
-        console.log(error);
-        throw error;
-    }
-}
+// async function sendResetPasswordLink(userData) {
+//     try {
+//         const responseData = await axoisInstance.post('/forgot-password', userData);
+//         if (responseData.data.error) {
+//             throw responseData.data.error
+//         }
+//         return responseData.data.data.emailDetails
+//     } catch (error) {
+//         console.log(error);
+//         throw error;
+//     }
+// }
 
 
-document.getElementById('forgotpassword-btn').addEventListener('click', async function (event) {
-    event.preventDefault();
-    const email = document.getElementById('email').value;
-    const userData = {
-        email: email
-    }
-    const res = await sendResetPasswordLink(userData);
-    document.getElementById('msg').innerText = res.message;
-})
+// document.getElementById('forgotpassword-btn').addEventListener('click', async function (event) {
+//     event.preventDefault();
+//     const email = document.getElementById('email').value;
+//     const userData = {
+//         email: email
+//     }
+//     const res = await sendResetPasswordLink(userData);
+//     document.getElementById('msg').innerText = res.message;
+// })

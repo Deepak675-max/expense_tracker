@@ -104,3 +104,7 @@ header {
 #leaderboard-box {
     display: none;
 }
+
+.nav-item {
+    display: none;
+}

@@ -12,6 +12,9 @@ async function signupUser(userData) {
         return responseData.data.data
     } catch (error) {
         console.log(error);
+        msg.classList.add('error');
+        msg.innerHTML = 'user with this email already exist';
+        setTimeout(() => msg.remove(), 3000);
         throw error;
     }
 }
