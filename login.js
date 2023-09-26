@@ -24,7 +24,7 @@ function login(event) {
                 console.log(responseData);
                 const token = responseData.token;
                 localStorage.setItem('token', token);
-                window.location.href = `table.html`;
+                window.location.href = `app.html`;
             })
             .catch(error => {
                 const errorMsg = document.getElementById('err-msg');
