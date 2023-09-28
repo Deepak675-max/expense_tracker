@@ -32,7 +32,7 @@ function login(event) {
                 msg.innerHTML = `<h5>Invalid username or password.</h5>`
                 msg.style.color = 'red';
                 msg.style.textAlign = 'center';
-                setTimeout(() => errorMsg.remove(), 5000);
+                setTimeout(() => msg.remove(), 5000);
                 console.log(error);
             })
     }
