@@ -3,6 +3,7 @@ const axoisInstance = axios.create({
 })
 
 async function signupUser(userData) {
+    const msg = document.querySelector('.msg');
     try {
         console.log(userData);
         const responseData = await axoisInstance.post('/signup', userData);
@@ -20,7 +21,6 @@ async function signupUser(userData) {
 }
 
 const signupBtn = document.querySelector('#signup-btn');
-const msg = document.querySelector('.msg');
 
 signupBtn.addEventListener('click', createAccount);
 
@@ -29,7 +29,7 @@ function createAccount(event) {
     const userName = document.getElementById('username');
     const email = document.getElementById('email');
     const password = document.getElementById('password');
-
+    const msg = document.querySelector('.msg');
     if (userName.value === '' || email.value === '' || password.value === '') {
         msg.classList.add('error');
         msg.innerHTML = 'Please enter all fields';
@@ -44,6 +44,7 @@ function createAccount(event) {
         signupUser(userData)
             .then(data => {
                 console.log(data);
+                msg.innerHTML = "<h5>Account Created Successfully.";
                 window.location.href = "login.html";
             })
             .catch(error => {
