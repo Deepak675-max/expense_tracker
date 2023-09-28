@@ -10,9 +10,11 @@ function login(event) {
     event.preventDefault();
     const email = document.querySelector('#email');
     const password = document.querySelector('#password');
+    const msg = document.querySelector("#msg");
     if (email.value === '' || password.value === '') {
-        msg.classList.add('error');
         msg.innerHTML = 'Please enter all fields';
+        msg.style.color = 'red';
+        msg.style.textAlign = 'center';
         setTimeout(() => msg.remove(), 3000);
     } else {
         const userData = {
@@ -27,10 +29,9 @@ function login(event) {
                 window.location.href = `index.html`;
             })
             .catch(error => {
-                const errorMsg = document.getElementById('err-msg');
-                errorMsg.innerHTML = `<h5>Invalid username or password.</h5>`
-                errorMsg.style.color = 'red';
-                errorMsg.style.textAlign = 'center';
+                msg.innerHTML = `<h5>Invalid username or password.</h5>`
+                msg.style.color = 'red';
+                msg.style.textAlign = 'center';
                 setTimeout(() => errorMsg.remove(), 5000);
                 console.log(error);
             })

@@ -390,12 +390,9 @@ document.getElementById('addExpense').addEventListener('click', async function (
     try {
 
         if (expenseAmount.value === '' || description.value === '' || category.value === '') {
-            console.log("deepak");
-
-            // alert('Please enter all fields');
-            msg.classList.add('error');
             msg.innerHTML = 'Please enter all fields';
-
+            msg.style.color = 'red';
+            msg.style.textAlign = 'center';
             // Remove error after 3 seconds
             setTimeout(() => msg.remove(), 3000);
         } else {
@@ -430,8 +427,10 @@ document.getElementById('editExpense').addEventListener('click', async function 
         console.log("category", category)
         if (expenseAmount.value === '' || description.value === '' || category.value === '') {
             // alert('Please enter all fields');
-            msg.classList.add('error');
             msg.innerHTML = 'Please enter all fields';
+
+            msg.style.color = 'red';
+            msg.style.textAlign = 'center';
 
             // Remove error after 3 seconds
             setTimeout(() => msg.remove(), 3000);
