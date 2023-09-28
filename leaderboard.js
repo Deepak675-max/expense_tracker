@@ -1,6 +1,6 @@
 // Axois Instance
 const axoisInstance = axios.create({
-    baseURL: 'http://13.126.13.196:3000/api'
+    baseURL: 'http://52.66.114.142:3000/api'
 })
 
 async function getLeaderboardData() {

@@ -1,7 +1,10 @@
 // Axois Instance
 
+// const axoisInstance = axios.create({
+//     baseURL: 'http://52.66.114.142:3000/api'
+// })
 const axoisInstance = axios.create({
-    baseURL: 'http://13.126.13.196:3000/api'
+    baseURL: 'http://52.66.114.142:3000/api'
 })
 
 // async function getExpense() {
@@ -36,7 +39,7 @@ const table = $('#example').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: 'http://13.126.13.196:3000/api/expense/get-expense',
+        url: 'http://52.66.114.142:3000/api/expense/get-expense',
         type: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`
@@ -212,7 +215,7 @@ async function getLeaderboardData() {
 //     // ordering: true,
 //     serverSide: true, // Enable server-side processing
 //     ajax: {
-//         url: 'http://localhost:3000/api/expense/get-expenses', // Replace with your backend API endpoint
+//         url: 'http://52.66.114.142:3000/api/expense/get-expenses', // Replace with your backend API endpoint
 //         type: 'POST', // Use POST method to send data to the backend
 //     },
 //     columns: [
@@ -249,7 +252,7 @@ async function getLeaderboardData() {
 //     processing: true,
 //     serverSide: true,
 //     ajax: {
-//         url: 'http://localhost:3000/api/expense/get-expense',
+//         url: 'http://52.66.114.142:3000/api/expense/get-expense',
 //         type: 'POST',
 //         headers: {
 //             'Authorization': `Bearer ${token}`

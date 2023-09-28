@@ -1,5 +1,5 @@
 const axoisInstance = axios.create({
-    baseURL: 'http://13.126.13.196:3000/api/auth'
+    baseURL: 'http://52.66.114.142:3000/api/auth'
 })
 
 const loginBtn = document.querySelector('#login-btn');
@@ -24,7 +24,7 @@ function login(event) {
                 console.log(responseData);
                 const token = responseData.token;
                 localStorage.setItem('token', token);
-                window.location.href = `app.html`;
+                window.location.href = `index.html`;
             })
             .catch(error => {
                 const errorMsg = document.getElementById('err-msg');
