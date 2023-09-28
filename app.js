@@ -35,6 +35,7 @@ const token = localStorage.getItem('token');
 
 const table = $('#example').DataTable({
     lengthMenu: [[5, 10, 25, 50, -1], ['5', '10', '25', '50', 'All']],
+    order: [[0, 'desc']],
     pageLength: 5,
     processing: true,
     serverSide: true,
@@ -67,8 +68,6 @@ const table = $('#example').DataTable({
         emptyTable: "No data available in this table"
     }
 });
-
-console.log(table);
 
 // Rest of your code...
 
