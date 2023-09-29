@@ -19,6 +19,7 @@ async function sendResetPasswordLink(userData) {
 
 document.getElementById('forgotpassword-btn').addEventListener('click', async function (event) {
     event.preventDefault();
+    const msg = document.getElementById('msg');
     try {
         event.preventDefault();
         const email = document.getElementById('email').value;
@@ -26,7 +27,6 @@ document.getElementById('forgotpassword-btn').addEventListener('click', async fu
             email: email
         }
         const res = await sendResetPasswordLink(userData);
-        const msg = document.getElementById('msg');
         msg.innerText = res.message;
         msg.style.color = 'green';
         setTimeout(() => msg.remove(), 3000);
