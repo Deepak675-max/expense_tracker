@@ -37,7 +37,6 @@ document.getElementById('forgotpassword-btn').addEventListener('click', async fu
         msg.style.color = 'green';
         setTimeout(() => msg.remove(), 3000);
     } catch (error) {
-        const msg = document.getElementById('msg');
         msg.innerText = error.message;
         msg.style.color = 'red';
         setTimeout(() => msg.remove(), 3000);
