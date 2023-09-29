@@ -23,6 +23,12 @@ document.getElementById('forgotpassword-btn').addEventListener('click', async fu
     try {
         event.preventDefault();
         const email = document.getElementById('email').value;
+        if (email === '') {
+            msg.innerText = "Please Enter valid email";
+            msg.style.color = 'red';
+            setTimeout(() => msg.remove(), 3000);
+            return;
+        }
         const userData = {
             email: email
         }
