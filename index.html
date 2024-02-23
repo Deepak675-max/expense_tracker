@@ -41,7 +41,7 @@
     </nav>
     <div class="container mt-5">
 
-        <h3 class="mb-5" style="text-align: center; color: darksalmon;">User Expenses</h3>
+        <h3 class="mb-5" style="text-align: center; color: darksalmon;">Expenses</h3>
 
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -125,22 +125,24 @@
                 </div>
             </div>
         </div>
+        <div class="mb-5">
+            <table id="example" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Amount</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-        <table id="example" class="display" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Amount</th>
-                    <th>Description</th>
-                    <th>Category</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody>
-
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
+       
     </div>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -1,6 +1,6 @@
 // Axois Instance
 const axoisInstance = axios.create({
-    baseURL: 'http://52.66.114.142:3000/api'
+    baseURL: 'http://localhost:3000/api'
 })
 const token = localStorage.getItem('token');
 
@@ -98,7 +98,7 @@ window.addEventListener('DOMContentLoaded', function (event) {
 function loadLeaderborad(leaderboardData) {
     let listItems = '';
     leaderboardData.map(data => {
-        listItems += `<li class="mt-3">Name - ${data.userName} Total Expense - ${data.totalExpense}</li>`
+        listItems += `<li class="mt-3">Name-${data.userName}, Total Expense-${data.totalExpense}</li>`
     })
 
     document.getElementById('leaderboardData').innerHTML = listItems;

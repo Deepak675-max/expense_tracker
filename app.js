@@ -1,10 +1,10 @@
 // Axois Instance
 
 // const axoisInstance = axios.create({
-//     baseURL: 'http://52.66.114.142:3000/api'
+//     baseURL: 'http://localhost:3000/api'
 // })
 const axoisInstance = axios.create({
-    baseURL: 'http://52.66.114.142:3000/api'
+    baseURL: 'http://localhost:3000/api'
 })
 
 // async function getExpense() {
@@ -32,7 +32,6 @@ const axoisInstance = axios.create({
 
 const token = localStorage.getItem('token');
 
-
 const table = $('#example').DataTable({
     lengthMenu: [[5, 10, 25, 50, -1], ['5', '10', '25', '50', 'All']],
     order: [[0, 'desc']],
@@ -40,32 +39,34 @@ const table = $('#example').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: 'http://52.66.114.142:3000/api/expense/get-expense',
+        url: 'http://localhost:3000/api/expense/get-expense',
         type: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`
         }
     },
     columns: [
-        { data: 'id' },
+        { data: '_id' },
         { data: 'amount' },
         { data: 'description' },
         { data: 'category' },
         {
             data: null,
+            orderable: false,
             render: function (data, type, row) {
                 return `<button id="edit-button" class="btn btn-warning" data-toggle="modal" data-target="#editModal">Edit</button>`;
             }
         },
         {
             data: null,
+            orderable: false,
             render: function (data, type, row) {
                 return `<button id="delete-button" class="btn btn-danger">Delete</button>`;
             }
         }
     ],
     language: {
-        emptyTable: "No data available in this table"
+        emptyTable: "No Expense Data Available"
     }
 });
 
@@ -294,7 +295,7 @@ $(document).ready(function () {
             $('#editamount').val(data.amount);
             $('#editdescription').val(data.description);
             $('#editcategory').val(data.category);
-            $('#expenseId').val(data.id);
+            $('#expenseId').val(data._id);
             // Populate other form fields as needed
 
             // Open the edit modal
@@ -308,7 +309,7 @@ $(document).ready(function () {
         if (data) {
             // Populate the form fields with data from the row
             const expenseData = {
-                expenseId: data.id
+                expenseId: data._id
             }
             deleteExpense(expenseData)
                 .then(res => {
@@ -459,7 +460,7 @@ window.addEventListener('DOMContentLoaded', function (event) {
     event.preventDefault();
     getUserFromToken()
         .then(user => {
-            document.querySelector('#profile').innerHTML = user.userName
+            document.querySelector('#profile').innerHTML = user.name
             console.log(user.isPremiumUser);
             if (user.isPremiumUser) {
                 document.getElementById('buy-premium-btn').style.display = 'none';
